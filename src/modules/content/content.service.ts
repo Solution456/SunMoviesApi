@@ -4,7 +4,7 @@ import axios from 'axios'
 
 
 import { SEARCH_URL, TORRENT_URL} from '../../constants/index'
-
+import { MagnetFromQuery } from './content.utils'
 
 export const searchMovie = async (searchTerm: string) => {
     
@@ -23,29 +23,17 @@ export const searchMovie = async (searchTerm: string) => {
     const $ = cheerio.load(searchResult.data)
     const data = $('#index tr').toArray()
 
-    const result = data.map(item => {
-        const [_, magnetTag, title] = $(item).find('a').toArray()
+    return data
+        .map(item => {
+            const [_, magnetTag, title] = $(item).find('a').toArray()
 
-        const magnetLink = $(magnetTag).attr('href')
+            const torrentUrl = `${TORRENT_URL}${$(title).attr('href')}`
+            const magnetLink = $(magnetTag).attr('href')
 
-        return {
-            magnet: magnetLink,
-            title: $(title).text()
-        }
-    })
-
-    // console.log(data)
-    
-    // const data = $('#index tr')
-
-    // const kek = cheerio.load('<h2 class="title">Hello world</h2>');
-
-    // const data = kek('h2')
-    // const $ = cheerio.load('<h2 class="title">Hello world</h2>');
-
-    // const data = $('h2')
-
-    // console.log(data.toArray())
-
-    return result
+            return {
+                magnet: MagnetFromQuery(magnetLink),
+                title: $(title).text(),
+                torrentUrl
+            }
+        }).filter(item => item.title)
 }
