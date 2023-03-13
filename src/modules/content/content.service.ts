@@ -6,12 +6,13 @@ import axios from 'axios'
 import { SEARCH_URL, TORRENT_URL} from '../../constants/index'
 import { MagnetFromQuery } from './content.utils'
 
-export const searchMovie = async (searchTerm: string) => {
-    
+
+
+export const searchMovieTorrent = async (searchTerm: string) => {
     const searchResult = await axios.get(SEARCH_URL+searchTerm, {
         proxy:{
             protocol: 'http',
-            host: '13.95.173.197',
+            host: '185.162.231.149',
             port: 80,
             
         }
@@ -22,6 +23,9 @@ export const searchMovie = async (searchTerm: string) => {
 
     const $ = cheerio.load(searchResult.data)
     const data = $('#index tr').toArray()
+
+    
+
 
     return data
         .map(item => {
