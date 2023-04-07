@@ -16,6 +16,7 @@ const state = {
 
 client.on('error', (err:Error) => {
     console.log('err', err.message)
+    console.log('ERROR')
 })
 
 client.on('torrent', () => {
@@ -26,23 +27,35 @@ client.on('torrent', () => {
 
 router.get('/remove/:magnet', (req: Request, res: Response) => {
   const magnet = req.params.magnet
-
-  client.remove(magnet)
+  console.log(magnet)
+  try{
+    client.remove(magnet,{}, (er)=>{
+      res.status(400)
+    })
+  }catch(er){
+    res.status(400)
+  }
+  
 })
 
 router.get('/add/:magnet', (req: Request, res: Response) => {
     const magnet = req.params.magnet
 
     console.log(magnet)
-  
-    client.add(magnet, torrent => {
-      const files = torrent.files.map(data => ({
-        name: data.name,
-        length: data.length
-      }))
-  
-      res.status(200).send(files)
-    })
+    try{
+      client.add(magnet, torrent => {
+        const files = torrent.files.map(data => ({
+          name: data.name,
+          length: data.length
+        }))
+    
+        res.status(200).send(files)
+      })
+    }catch(er){
+      console.log('ERROR')
+      res.status(400).send(er)
+    }
+    
   })
 
 
