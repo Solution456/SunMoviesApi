@@ -18,8 +18,6 @@ export const searchMovieTorrent = async (searchTerm: string) => {
         }
     })
 
-    // console.log(searchResult)
-
 
     const $ = cheerio.load(searchResult.data)
     const data = $('#index tr').toArray()
