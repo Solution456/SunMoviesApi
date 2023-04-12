@@ -2,11 +2,12 @@
   "name": "express-api",
   "version": "1.0.0",
   "description": "parser magnetURL Api",
-  "main": "index.ts",
+  "main": "dist",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "build": "tsc",
+    "build": "pnpm run tsc",
+    "tsc": "tsc -p tsconfig.json",
     "start": "node dist",
     "dev": "nodemon"
   },
